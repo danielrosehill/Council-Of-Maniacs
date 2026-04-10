@@ -154,7 +154,7 @@ Each maniac evaluated the others' proposals — in character, naturally.
 
 {''.join(stage2_blocks)}
 
-#{"" if not aggregate else f'''
+{"" if not aggregate else f'''
 == Aggregate Rankings
 
 #table(

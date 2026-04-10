@@ -66,6 +66,30 @@ CHAIRMAN_MODEL=google/gemini-2.5-flash
 - Backend: http://localhost:8001
 - Frontend: http://localhost:5173
 
+## Career Division
+
+The Career Division is a headless track (no frontend) where the 8 maniacs review a professional background and generate ideas across three modes:
+
+- **Side Hustles** — Absurd side hustle ideas based on your skills
+- **Career Pivots** — Radical career pivot proposals
+- **Business Ideas** — Absurd but weirdly plausible business concepts
+
+Each run goes through the full 3-stage pipeline (ideation, peer review, moderator synthesis) and outputs a PDF report.
+
+```bash
+# Write your background to a file, then:
+uv run python -m backend.career.cli side-hustles -f background.txt
+uv run python -m backend.career.cli career-pivots -f background.txt
+uv run python -m backend.career.cli business-ideas -f background.txt
+```
+
+### Example Reports
+
+These were generated from a real professional background ([danielrosehill.com](https://danielrosehill.com)):
+
+- [Absurd Side Hustles (PDF)](examples/career-reports/career-side-hustles-20260410-191426.pdf) — 62 pages of unhinged income streams
+- [Unhinged Career Pivots (PDF)](examples/career-reports/career-career-pivots-20260410-191427.pdf) — 55 pages of radical career reinvention
+
 ## Tech Stack
 
 - **Backend:** FastAPI (Python 3.10+), async httpx, OpenRouter API
