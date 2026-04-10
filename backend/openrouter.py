@@ -1,5 +1,6 @@
 """OpenRouter API client for making LLM requests."""
 
+import asyncio
 import httpx
 from typing import List, Dict, Any, Optional
 from .config import OPENROUTER_API_KEY, OPENROUTER_API_URL
@@ -14,7 +15,7 @@ async def query_model(
     Query a single model via OpenRouter API.
 
     Args:
-        model: OpenRouter model identifier (e.g., "openai/gpt-4o")
+        model: OpenRouter model identifier
         messages: List of message dicts with 'role' and 'content'
         timeout: Request timeout in seconds
 
@@ -53,27 +54,55 @@ async def query_model(
         return None
 
 
-async def query_models_parallel(
-    models: List[str],
-    messages: List[Dict[str, str]]
-) -> Dict[str, Optional[Dict[str, Any]]]:
+async def query_persona(
+    model: str,
+    system_prompt: str,
+    user_message: str,
+    timeout: float = 120.0
+) -> Optional[Dict[str, Any]]:
     """
-    Query multiple models in parallel.
+    Query a model with a specific persona system prompt.
 
     Args:
-        models: List of OpenRouter model identifiers
-        messages: List of message dicts to send to each model
+        model: OpenRouter model identifier
+        system_prompt: The persona's system prompt
+        user_message: The user's message/question
+        timeout: Request timeout in seconds
 
     Returns:
-        Dict mapping model identifier to response dict (or None if failed)
+        Response dict with 'content', or None if failed
     """
-    import asyncio
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_message},
+    ]
+    return await query_model(model, messages, timeout)
 
-    # Create tasks for all models
-    tasks = [query_model(model, messages) for model in models]
 
-    # Wait for all to complete
+async def query_personas_parallel(
+    model: str,
+    personas: List[Dict[str, Any]],
+    user_message: str
+) -> Dict[str, Optional[Dict[str, Any]]]:
+    """
+    Query the same model with multiple personas in parallel.
+
+    Args:
+        model: OpenRouter model identifier (same for all)
+        personas: List of persona dicts with 'id', 'name', 'system_prompt'
+        user_message: The user's message to send to each persona
+
+    Returns:
+        Dict mapping persona id to response dict (or None if failed)
+    """
+    tasks = [
+        query_persona(model, p["system_prompt"], user_message)
+        for p in personas
+    ]
+
     responses = await asyncio.gather(*tasks)
 
-    # Map models to their responses
-    return {model: response for model, response in zip(models, responses)}
+    return {
+        persona["id"]: response
+        for persona, response in zip(personas, responses)
+    }

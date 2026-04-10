@@ -1,7 +1,7 @@
 [project]
-name = "llm-council"
+name = "council-of-maniacs"
 version = "0.1.0"
-description = "Your LLM Council"
+description = "A deliberation council of wildly unhinged AI personas"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

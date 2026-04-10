@@ -30,7 +30,6 @@ export default function ChatInterface({
   };
 
   const handleKeyDown = (e) => {
-    // Submit on Enter (without Shift)
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
@@ -41,8 +40,8 @@ export default function ChatInterface({
     return (
       <div className="chat-interface">
         <div className="empty-state">
-          <h2>Welcome to LLM Council</h2>
-          <p>Create a new conversation to get started</p>
+          <h2>Council of Maniacs</h2>
+          <p>Create a new session to unleash the council</p>
         </div>
       </div>
     );
@@ -53,8 +52,8 @@ export default function ChatInterface({
       <div className="messages-container">
         {conversation.messages.length === 0 ? (
           <div className="empty-state">
-            <h2>Start a conversation</h2>
-            <p>Ask a question to consult the LLM Council</p>
+            <h2>Summon the Council</h2>
+            <p>Ask a question and let the maniacs deliberate</p>
           </div>
         ) : (
           conversation.messages.map((msg, index) => (
@@ -70,37 +69,35 @@ export default function ChatInterface({
                 </div>
               ) : (
                 <div className="assistant-message">
-                  <div className="message-label">LLM Council</div>
+                  <div className="message-label">Council of Maniacs</div>
 
-                  {/* Stage 1 */}
                   {msg.loading?.stage1 && (
                     <div className="stage-loading">
                       <div className="spinner"></div>
-                      <span>Running Stage 1: Collecting individual responses...</span>
+                      <span>Stage 1: The maniacs are formulating their takes...</span>
                     </div>
                   )}
                   {msg.stage1 && <Stage1 responses={msg.stage1} />}
 
-                  {/* Stage 2 */}
                   {msg.loading?.stage2 && (
                     <div className="stage-loading">
                       <div className="spinner"></div>
-                      <span>Running Stage 2: Peer rankings...</span>
+                      <span>Stage 2: The maniacs are judging each other...</span>
                     </div>
                   )}
                   {msg.stage2 && (
                     <Stage2
                       rankings={msg.stage2}
-                      labelToModel={msg.metadata?.label_to_model}
+                      labelToMember={msg.metadata?.label_to_member}
                       aggregateRankings={msg.metadata?.aggregate_rankings}
+                      stage1Results={msg.stage1}
                     />
                   )}
 
-                  {/* Stage 3 */}
                   {msg.loading?.stage3 && (
                     <div className="stage-loading">
                       <div className="spinner"></div>
-                      <span>Running Stage 3: Final synthesis...</span>
+                      <span>Stage 3: The Moderator is making sense of this...</span>
                     </div>
                   )}
                   {msg.stage3 && <Stage3 finalResponse={msg.stage3} />}
@@ -113,7 +110,7 @@ export default function ChatInterface({
         {isLoading && (
           <div className="loading-indicator">
             <div className="spinner"></div>
-            <span>Consulting the council...</span>
+            <span>The council is in session...</span>
           </div>
         )}
 
@@ -136,7 +133,7 @@ export default function ChatInterface({
             className="send-button"
             disabled={!input.trim() || isLoading}
           >
-            Send
+            Summon
           </button>
         </form>
       )}

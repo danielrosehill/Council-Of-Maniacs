@@ -60,9 +60,8 @@
 .rank-model {
   flex: 1;
   color: #333;
-  font-family: monospace;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .rank-score {
@@ -111,10 +110,10 @@
   margin-bottom: 20px;
 }
 
-.ranking-model {
-  color: #888;
-  font-size: 12px;
-  font-family: monospace;
+.ranking-member {
+  color: #4a90e2;
+  font-size: 14px;
+  font-weight: 600;
   margin-bottom: 12px;
 }
 

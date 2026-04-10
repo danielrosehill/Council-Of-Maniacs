@@ -52,11 +52,23 @@
   border: 1px solid #e0e0e0;
 }
 
-.model-name {
-  color: #888;
-  font-size: 12px;
+.member-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
   margin-bottom: 12px;
-  font-family: monospace;
+}
+
+.member-name {
+  color: #4a90e2;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.member-tagline {
+  color: #999;
+  font-size: 13px;
+  font-style: italic;
 }
 
 .response-text {
