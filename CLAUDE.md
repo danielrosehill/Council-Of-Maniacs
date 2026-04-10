@@ -65,3 +65,42 @@ Fork lineage: inspired by karpathy/llm-council, but uses one model with persona 
 6. **The Conspiracy Theorist** - Sees hidden agendas behind everything
 7. **The Absurdist** - Seeks the most comically impractical solutions
 8. **The Overengineer** - Enterprise-grade solutions for trivial problems
+
+## Career Track (`backend/career/`)
+
+A specialized track where the 8 maniacs review a user's professional background and generate ideas. No frontend — runs via Claude Code skills or CLI.
+
+### Three Modes
+- **`side-hustles`** — Absurd side hustle ideas based on the user's skills
+- **`career-pivots`** — Radical career pivot proposals
+- **`business-ideas`** — Absurd but weirdly plausible business concepts (accepts loose clues, not just resumes)
+
+### Architecture
+- **`career/config.py`** — Career-specific persona overlays prepended to base system prompts, plus moderator prompt. Each persona gets a career-focused directive layered on top of their core personality.
+- **`career/council.py`** — Same 3-stage pipeline (ideation → peer review → moderator synthesis) adapted for career content. Uses `build_career_personas()` to merge overlays with base prompts.
+- **`career/report.py`** — Generates Typst source from results and compiles to PDF. Includes title page, TOC, all 3 stages, aggregate rankings table, and moderator verdict.
+- **`career/cli.py`** — CLI entry point: `uv run python -m backend.career.cli <mode> -f <background-file>`
+
+### Claude Code Skills
+- `/career-hustles` — Side hustle ideation pipeline with PDF output
+- `/career-pivots` — Career pivot ideation pipeline with PDF output
+- `/business-ideas` — Business idea generation pipeline with PDF output
+
+### PDF Reports
+Output goes to `data/career-reports/` as JSON + Typst source + compiled PDF. Reports include:
+- Title page with mode label and date
+- User's background (quoted)
+- Stage 1: All 8 persona proposals in styled blocks
+- Stage 2: Peer review evaluations + aggregate rankings table
+- Stage 3: Moderator's verdict with ranked actionable ideas
+
+### CLI Usage
+```bash
+# Write background to a file, then run:
+uv run python -m backend.career.cli side-hustles -f background.txt
+uv run python -m backend.career.cli career-pivots -f background.txt
+uv run python -m backend.career.cli business-ideas -f background.txt
+
+# Skip PDF (just JSON + Typst source):
+uv run python -m backend.career.cli side-hustles -f background.txt --no-pdf
+```
